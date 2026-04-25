@@ -29,6 +29,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            val keystoreFile = project.findProperty("keystoreFile") as? String ?: ""
+            if (keystoreFile.isNotEmpty()) {
+                signingConfig = signingConfigs.create("release") {
+                    storeFile = file(keystoreFile)
+                    storePassword = project.findProperty("storePassword") as? String ?: ""
+                    keyAlias = project.findProperty("keyAlias") as? String ?: ""
+                    keyPassword = project.findProperty("keyPassword") as? String ?: ""
+                }
+            }
         }
     }
     compileOptions {
