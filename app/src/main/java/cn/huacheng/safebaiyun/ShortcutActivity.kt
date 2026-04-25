@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -22,22 +21,24 @@ import cn.huacheng.safebaiyun.unlock.UnlockRepo
 import cn.huacheng.safebaiyun.util.showToast
 
 /**
- *
- *@description:
- *@author: guangzhou
- *@create: 2024-05-06
+ * 快捷方式入口 - 使用默认门禁开门
  */
 class ShortcutActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("largetWidget","onCreate")
         setContent {
-            Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background), contentAlignment = Alignment.Center) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background),
+                contentAlignment = Alignment.Center
+            ) {
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
         }
+
         if (intent.action == Intent.ACTION_CREATE_SHORTCUT) {
             createShortcut()
         } else {
@@ -62,14 +63,17 @@ class ShortcutActivity : ComponentActivity() {
             true
         }
 
-        if (!hasPermission || DataRepo.readData().first.isEmpty()) {
+        val defaultDevice = DataRepo.getDefaultDevice()
+
+        if (!hasPermission || defaultDevice == null) {
             showToast("请先初始化")
-            startActivity(Intent(this,MainActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
         }
-        showToast("开始解锁门禁")
-        UnlockRepo.unlock()
+
+        showToast("正在开门: ${defaultDevice.name}")
+        UnlockRepo.unlock(defaultDevice.macAddress, defaultDevice.key)
         finish()
     }
 }

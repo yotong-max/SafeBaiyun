@@ -28,10 +28,17 @@
             </intent-filter>
         </activity>
 
-
         <activity
             android:name=".ShortcutActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".UnlockActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SafeBaiyun"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:launchMode="singleInstance" />
 
         <activity-alias
             android:name="cn.huacheng.safebaiyun.QuickUnlockActivity"
@@ -45,10 +52,10 @@
             </intent-filter>
         </activity-alias>
 
+        <!-- 中型小组件 -->
         <receiver
             android:name=".widget.MediumReceiver"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -57,16 +64,28 @@
                 android:resource="@xml/medium_widget_config" />
         </receiver>
 
+        <!-- 大型小组件 -->
         <receiver
             android:name=".widget.LargeReceiver"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/large_widget_config" />
+        </receiver>
+
+        <!-- 3x3网格小组件 -->
+        <receiver
+            android:name=".widget.GridReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/grid_widget_config" />
         </receiver>
 
     </application>
